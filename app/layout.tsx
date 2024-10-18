@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import { Comic_Neue } from "next/font/google";
+import SessionWrapper from "@/components/SessionWrapper";
+import Header from "@/components/Header";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const comic = Comic_Neue({
+  weight: ["300", "400", "700"],
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -24,12 +22,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <SessionWrapper>
+      <html lang="en">
+        <body className={comic.className}>
+          <ThemeProvider attribute="class">
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <div className="bg-no-repeat bg-cover bg-[top_center] bg-[url('/Homepage.svg')]">
+                {children}
+              </div>
+            </div>
+          </ThemeProvider>
+        </body>
+      </html>
+    </SessionWrapper>
   );
 }
